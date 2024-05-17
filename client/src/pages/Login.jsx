@@ -2,10 +2,29 @@ import React, { useState } from 'react';
 import { Container, IconButton, Paper, Typography, Avatar, TextField, Button, Stack } from "@mui/material";
 import { CameraAlt } from '@mui/icons-material';
 import { VisuallyHidden } from '../components/styles/StyleComponents';
-
+import {useInputValidation,useFileHandler} from '6pp' //
+import { usernameValidator } from '../utils/validator';
 
 const Login = () => {
+
   const [isLogin, setIsLogin] = useState(true); // Initialize isLogin state variable
+
+  const name = useInputValidation("")
+  const bio = useInputValidation("")
+  const username = useInputValidation("",usernameValidator)
+  const password = useInputValidation("")
+
+  const avatar = useFileHandler("single");
+
+  const handleLogin =(e)=>{
+    e.preventDefault();
+  }
+
+  const handleSignup =(e)=>{
+    e.preventDefault();
+  }
+
+
 
   return (
     <Container
@@ -38,13 +57,19 @@ const Login = () => {
                 width: "100%",
                 marginTop: "1rem"
               }}
+
+              onSubmit={handleLogin}
+
             >
               <TextField
                 required
                 fullWidth
                 label="username"
                 margin='normal'
-                variant='outlined' />
+                variant='outlined'
+                value={username.value}
+                onChange={username.changeHandler}
+                 />
 
               <TextField
                 required
@@ -52,7 +77,9 @@ const Login = () => {
                 label="password"
                 type='password'
                 margin='normal'
-                variant='outlined' />
+                variant='outlined'
+                value={password.value}
+                onChange={password.changeHandler} />
 
               <Button sx={{ marginTop: "1rem" }}
                 variant='contained'
@@ -81,6 +108,8 @@ const Login = () => {
                 width: "100%",
                 marginTop: "1rem"
               }}
+
+              onSubmit={handleSignup}
             >
 
 
@@ -89,7 +118,12 @@ const Login = () => {
                         width:"10rem",
                         height:"10rem",
                         objectFit:"contain"
-                    }}/>
+                    }}
+
+                    src={avatar.preview}
+                    />
+
+             
 
                     <IconButton
                      sx={{
@@ -108,11 +142,20 @@ const Login = () => {
                     >
                         <>
                             <CameraAlt/>
-                            <VisuallyHidden type="file"/>
+                            <VisuallyHidden type="file" onChange={avatar.changeHandler}/>
                         </>
                     </IconButton>
 
                 </Stack>
+
+
+                {
+                avatar.error && (
+                  <Typography m={"1rem"} width={"fit-content"} display={"block"} color="error"variant='caption'>
+                    {avatar.error}
+                  </Typography>
+                )
+              }
             
 
               <TextField
@@ -120,21 +163,36 @@ const Login = () => {
                 fullWidth
                 label="name"
                 margin='normal'
-                variant='outlined' />
+                variant='outlined'
+                value={name.value}
+                onChange={name.changeHandler}
+                 />
 
               <TextField
                 required
                 fullWidth
                 label="username"
                 margin='normal'
-                variant='outlined' />
+                variant='outlined'
+                value={username.value}
+                onChange={username.changeHandler} />
+
+              {
+                username.error && (
+                  <Typography color="error"variant='caption'>
+                    {username.error}
+                  </Typography>
+                )
+              }
 
               <TextField
                 required
                 fullWidth
                 label="Bio"
                 margin='normal'
-                variant='outlined' />
+                variant='outlined'
+                value={bio.value}
+                onChange={bio.changeHandler} />
 
               <TextField
                 required
@@ -142,7 +200,10 @@ const Login = () => {
                 label="password"
                 type='password'
                 margin='normal'
-                variant='outlined' />
+                variant='outlined'
+                value={password.value}
+                onChange={password.changeHandler} />
+
 
               <Button sx={{ marginTop: "1rem" }}
                 variant='contained'
